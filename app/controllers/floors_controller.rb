@@ -10,7 +10,6 @@ class FloorsController < ApplicationController
   # GET /forms/1
   def show
     render json: gen_floor
-    
   end
 
   # POST /forms
@@ -72,7 +71,7 @@ class FloorsController < ApplicationController
         car_color: slot.carcolor,
         status: slot.status,
         slot_created_at: slot.created_at,
-        slot_updated_at: slot.updated_at
+        slot_updated_at: slot.updated_at,
       }
     end
     return data

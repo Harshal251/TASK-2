@@ -16,23 +16,25 @@ class SlotsController < ApplicationController
   # POST /forms
   def create
     @slot = Slot.new(slot_params)
-    
+
     max_floor_length = 10
     if @slot.floor.slots.length < 10
       # @slot.floor_id = session[:floor_id]
       if @slot.save
+        @slot.in = DateTime.now
         render json: @slot, status: :created
       else
         render json: @slot.errors, status: :unprocessable_entity
       end
     else
-      render json: { message: "slot limit exceeded"}
+      render json: { message: "slot limit exceeded" }
     end
   end
 
   # PATCH/PUT /forms/1
   def update
     if @slot.update(slot_params)
+      @slot.out = DateTime.now
       render json: @slot
     else
       render json: @slot.errors, status: :unprocessable_entity
@@ -42,7 +44,7 @@ class SlotsController < ApplicationController
   # DELETE /forms/1
   def destroy
     @slot.destroy
-    render json: {message: "Details of Slot #{@slot.id} are deleted Successfully"}
+    render json: { message: "Details of Slot #{@slot.id} are deleted Successfully" }
   end
 
   private
@@ -54,6 +56,6 @@ class SlotsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def slot_params
-    params.fetch(:slot, {}).permit(:clientname, :carnumber, :carcolor, :price, :slotno, :status, :floor_id,:in,:out,:time)
+    params.fetch(:slot, {}).permit(:clientname, :carnumber, :carcolor, :price, :slotno, :status, :in, :floor_id, :time)
   end
 end

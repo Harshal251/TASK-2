@@ -5,9 +5,10 @@ class Users::SessionsController < Devise::SessionsController
 
   def respond_with(resource, _opts = {})
     if current_user
-      
-      render json: { message: "#{current_user.name.capitalize}! You are logged In!! Role: #{current_user.role.capitalize}" }, status: :ok
+      #mail to user when signin
+      UserMailer.sign_in(current_user).deliver_later
 
+      render json: { message: "#{current_user.name.capitalize}! You are logged In!! Role: #{current_user.role.capitalize}" }, status: :ok
     else
       render json: { message: "not logged in. " }, status: :unprocessable_entity
     end
@@ -16,7 +17,7 @@ class Users::SessionsController < Devise::SessionsController
   def respond_to_on_destroy
     log_out_success && return if current_user
 
-    # log_out_failure
+    log_out_failure
   end
 
   def log_out_success

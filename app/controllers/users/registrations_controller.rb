@@ -2,7 +2,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # -------------------------------------------------------------------------------------------
-  def create 
+  def create
     # if the role of the current login user is admin then only create a user
     return not_authorized if !current_user
     if current_user.role == "admin"
@@ -12,7 +12,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         yield resource if block_given?
         if resource.persisted?
           if resource.active_for_authentication?
-            UserMailer.welcome(resource).deliver_later
+            UserMailer.welcome(resource).deliver_later #mail to new user created by admin
             set_flash_message! :notice, :signed_up
             sign_up(resource_name, resource)
             respond_with resource, location: after_sign_up_path_for(resource)
@@ -21,7 +21,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
             expire_data_after_sign_in!
             respond_with resource, location: after_inactive_sign_up_path_for(resource)
           end
-         else
+        else
           clean_up_passwords resource
           set_minimum_password_length
           respond_with resource
@@ -41,6 +41,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   include RackSessionFix    #fix 505 error internal server error  session diable
 
   private
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :role])
   end

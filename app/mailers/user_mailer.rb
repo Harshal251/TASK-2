@@ -3,4 +3,8 @@ class UserMailer < ApplicationMailer
     @user = user
     mail(to:@user.email, subject: 'Welcome to Car Parking Management Api!!')
   end
+  def sign_in(user)
+    @user = user
+    mail(to:@user.email, subject:"Login Sucess!!")
+  end
 end
