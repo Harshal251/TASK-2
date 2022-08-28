@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   resources :floors
   # Defines the root path route ("/")
   # root "articles#index"
+  get '*path', :to => 'application#routing_error'
+  post '*path', :to => 'application#routing_error'
 end

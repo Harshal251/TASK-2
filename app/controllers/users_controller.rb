@@ -43,11 +43,14 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      render json: { message: "User Details Updated Successfully!!" }
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
+    # if @user.update(user_params)
+    #   render json: { message: "User Details Updated Successfully!!  user_id: #{@user.id}" }
+    # else
+    #   render json: @user.errors, status: :unprocessable_entity
+    # end
+    @user.update(user_params)
+    @user.save
+    render json: user_update
   end
 
   # DELETE /users/1
@@ -85,6 +88,16 @@ class UsersController < ApplicationController
       user_id: @user.id,
       user_name: @user.name,
       Role: @user.role,
+    }
+    return data
+  end
+  def user_update
+    data = []
+    data << { 
+      message: "User Details Updated Successfully",
+      user_id: @user.id,
+      user_name: @user.name,
+      Role: @user.role
     }
     return data
   end

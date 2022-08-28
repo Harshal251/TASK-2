@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_23_202316) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_26_154711) do
   create_table "floors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "floorno"
     t.datetime "created_at", null: false
@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_23_202316) do
     t.string "carcolor"
     t.datetime "in"
     t.datetime "out"
-    t.time "time"
+    t.float "time"
     t.decimal "price", precision: 10
     t.integer "floor_id"
     t.integer "slotno"

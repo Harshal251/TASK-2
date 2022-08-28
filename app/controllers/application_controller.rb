@@ -1,5 +1,28 @@
 class ApplicationController < ActionController::API
   before_action :authenticate_user!
+  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+  rescue_from ActionDispatch::Request::Session::DisabledSessionError, with: :render_session_disabled
+
+  def render_unprocessable_entity_response(exception)
+    render json: exception.record.errors, status: :unprocessable_entity
+  end
+
+  def render_not_found_response(exception)
+    render json: { error: exception.message }, status: :not_found
+  end
+
+  def render_session_disabled
+    render json: { error: exception.message }, status: 500
+  end
+
+  def routing_error(error = "Routing error", status = :not_found, exception = nil)
+    # render_exception(404, "Routing Error", exception)
+    render json: {
+             message: "Please Check Your Routes!!",
+           # exception: :exception
+           }, status: :not_found
+  end
 
   def check_user_params
     params[:user].present?

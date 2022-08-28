@@ -56,7 +56,7 @@ class FloorsController < ApplicationController
       floor_created_at: @floor.created_at,
       floor_updated_at: @floor.updated_at,
       floor_slots_length: @floor.slots.length,
-      floor_slots: gen_floor_slots
+      floor_slots: gen_floor_slots,
     }
     return data
   end
