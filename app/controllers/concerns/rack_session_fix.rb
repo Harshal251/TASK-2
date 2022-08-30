@@ -1,5 +1,10 @@
-module RackSessionFix        # #fix 505 error internal server error  session diable
+# frozen_string_literal: true
+
+# ewjhf
+module RackSessionFix
   extend ActiveSupport::Concern
+
+  # ewnjf
   class FakeRackSession < Hash
     def enabled?
       false
@@ -7,7 +12,9 @@ module RackSessionFix        # #fix 505 error internal server error  session dia
   end
   included do
     before_action :set_fake_rack_session_for_devise
+
     private
+
     def set_fake_rack_session_for_devise
       request.env['rack.session'] ||= FakeRackSession.new
     end

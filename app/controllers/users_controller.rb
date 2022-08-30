@@ -1,25 +1,18 @@
+# frozen_string_literal: true
+
+# User_cpntroller
 class UsersController < ApplicationController
   load_and_authorize_resource
   before_action :authenticate_user!
-  before_action :set_user, only: %i[ show update destroy ]
+  before_action :set_user, only: %i[show update destroy]
 
   # GET /users
   def index
     if current_user
       @users = User.all
       render json: { users: @users }
-      # @users = User.where.not(role1: 1) if user_student
-      # @users = User.where(role1: 1) if user_teacher
-      # @users = User.all if user_admin
-      # @users1 = User.where(role1: 0) if user_teacher
-
-      #     if user_teacher
-      #               render json: { student: @users1, teacher: @users }
-      #     else
-      #           render json: {users: @users }
-      #     end
     else
-      render json: { message: "Login first as admin and then access this page." }, status: :unprocessable_entity
+      render json: { message: 'Login first as admin and then access this page.' }, status: :unprocessable_entity
     end
   end
 
@@ -31,7 +24,7 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    if current_user.role == "admin"
+    if current_user.role == 'admin'
       @user = User.new(user_params)
       @user.save
       render json: @user, status: :created, location: @user
@@ -74,12 +67,12 @@ class UsersController < ApplicationController
   def user_destroy
     data = []
     data << {
-      message: "User Details Destroyed Successfully",
+      message: 'User Details Destroyed Successfully',
       user_id: @user.id,
       user_name: @user.name,
-      Role: @user.role,
+      Role: @user.role
     }
-    return data
+    data
   end
 
   def user_details
@@ -87,18 +80,19 @@ class UsersController < ApplicationController
     data << {
       user_id: @user.id,
       user_name: @user.name,
-      Role: @user.role,
+      Role: @user.role
     }
-    return data
+    data
   end
+
   def user_update
     data = []
-    data << { 
-      message: "User Details Updated Successfully",
+    data << {
+      message: 'User Details Updated Successfully',
       user_id: @user.id,
       user_name: @user.name,
       Role: @user.role
     }
-    return data
+    data
   end
 end

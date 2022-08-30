@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# hgyh
 class CreateSlots < ActiveRecord::Migration[7.0]
   def change
     create_table :slots do |t|
@@ -11,7 +14,6 @@ class CreateSlots < ActiveRecord::Migration[7.0]
       t.integer :floor_id
       t.integer :slotno
       t.string :status
-
       t.timestamps
     end
   end
