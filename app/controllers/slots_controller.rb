@@ -35,11 +35,34 @@ class SlotsController < ApplicationController
   def update
     if @slot.update(slot_params)
       @slot.slotno = @slot.id
-      @slot.out = DateTime.now
-      @slot.time = (@slot.out.to_time.to_i - @slot.in.to_time.to_i).to_f / 60
-      @slot.price = @slot.time / 60 * 100 # price for 1 hour is 100
-      @slot.save
-      render json: @slot
+      if @slot.status == 'vaccant'
+        @slot.out = DateTime.now
+        @slot.time = (@slot.out.to_time.to_i - @slot.in.to_time.to_i).to_f / 60
+        @slot.price = @slot.time / 60 * 100
+        @slot.save
+        @slot.price = 0.0
+        @slot.save
+
+        #  UserMailer.payment(@slot.user.email).deliver_later
+        require('stripe')
+
+        Stripe.api_key = 'sk_test_51LdETHSG5cMn4qG8APZiGmsAjL5n8oS2CblLoLfCn3XGbPGgPiv3SKEKsrG2PqoOuL9VPHGjjUUD6KaaV6GhaetY005A1NPTzC'
+
+        price = Stripe::Price.create({
+                                       unit_amount: @slot.price * 100,
+                                       currency: 'inr',
+                                       product: 'prod_MM084bx0fPh0oK'
+                                     })
+
+        order = Stripe::PaymentLink.create(
+          line_items: [{ price: price.id, quantity: 1 }],
+          after_completion: { type: 'redirect', redirect: { url: 'https://dashboard.stripe.com/test/payments/pi_3LdIZ8SG5cMn4qG808CaaGia' } }
+        )
+
+        render json: gen_payment(order.url)
+      else
+        render json: @slot
+      end
     else
       render json: @slot.errors, status: :unprocessable_entity
     end
@@ -61,5 +84,17 @@ class SlotsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def slot_params
     params.fetch(:slot, {}).permit(:clientname, :carnumber, :carcolor, :price, :slotno, :status, :in, :floor_id, :time)
+  end
+
+  def gen_payment(url)
+    data = []
+    data << {
+
+      slot_id: @slot.id,
+      slot_status: @slot.status,
+      Payment: url
+
+    }
+    data
   end
 end

@@ -17,13 +17,21 @@ class FloorsController < ApplicationController
 
   # POST /forms
   def create
-    @floor = Floor.new(floor_params)
+    if @floor.length <=10
+    f = params[:floor][:floorno].to_i
+    for i in 1..f
+      @floor = Floor.new(floor_params)
+      @floor.floorno = i
+      if @floor.save
+      else
+        render json: @floor.errors, status: :unprocessable_entity
+      end
+              # render json: @floor, status: :created, location: @floor
 
-    if @floor.save
-      render json: @floor, status: :created, location: @floor
-    else
-      render json: @floor.errors, status: :unprocessable_entity
     end
+  else
+    render json: {message: "Floor Limit Exceed!!"}
+  end
   end
 
   # PATCH/PUT /forms/1
