@@ -22,6 +22,7 @@ class SlotsController < ApplicationController
     if @slot.floor.slots.length < 10
       if @slot.save
         @slot.in = DateTime.now
+        @slot.email = current_user.email
         @slot.save
         render json: @slot, status: :created
       else

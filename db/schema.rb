@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_26_154711) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_02_130339) do
   create_table "floors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "floorno"
     t.datetime "created_at", null: false
@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_154711) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
