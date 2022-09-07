@@ -77,9 +77,10 @@ class UsersController < ApplicationController
   def user_details
     data = []
     data << {
+      email: @user.email,
       user_id: @user.id,
       user_name: @user.name,
-      Role: @user.role
+      Role: @user.role,
     }
     data
   end
@@ -90,7 +91,7 @@ class UsersController < ApplicationController
       message: 'User Details Updated Successfully',
       user_id: @user.id,
       user_name: @user.name,
-      Role: @user.role
+      Role: @user.role,
     }
     data
   end
